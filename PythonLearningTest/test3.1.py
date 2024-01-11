@@ -3,7 +3,11 @@ import urllib.request
 response= urllib.request.urlopen('https://www.python.org')
 #GET 请求抓取
 #urllib.request.urlopen(url, data=None, [ timeout, ]*, cafile=None, capath=None, cadefault=False, context=None)
-# print(response. read(). decode ('utf-8'))
+print(response. read(). decode ('utf-8'))
+#read()可以一次性读取文件中所有内容
+#readline()每次读取一行数据
+#readlines()读取全部行，返回的是一个字符串列表，每个元素为文件的一行内容
+print(response)
 # print(type(response)) #<class 'http.client.HTTPResponse'>
 print(response.status) #200
 print(response.getheaders()) #一大堆元组[('Server', 'nginx'),...]
@@ -35,10 +39,12 @@ import urllib.error
 try:
     response = urllib.request.urlopen('http://httpbin.org/get', timeout=0.1)
 except urllib.error.URLError as e:
-    if isinstance(e.reason, socket.timeout):
+    if isinstance(e.reason, socket.timeout):#isinstance(obj1,obj2):用于在判定一个对象(obj1)是否是另一个给定类(obj2)的实例
         print('TIME OUT') #TIME OUT
 """
 """
+#如果请求中需要加入Headers 等信息，就可以利用更强大的Request 类来构建。
+#，一方面我们可以将请求独立成一个对象，另一方面可更加丰富和灵活地配置参数。
 import urllib.request
 request = urllib.request.Request ('https://python.org')
 response = urllib.request.urlopen(request)
@@ -111,10 +117,15 @@ except URLError as e:
 
 """
 import http.cookiejar, urllib.request
+#构建一个CookieJar对象实例来保存cookie
 cookie = http.cookiejar.CookieJar()
+#使用HTTPCookieProcessor()来创建cookie处理器对象，参数为CookieJar()对象
 handler = urllib.request.HTTPCookieProcessor(cookie)
+#通过build_opener()来构建opener
 opener = urllib.request.build_opener(handler)
+#以get方法访问页面，访问之后会自动保存cookie到cookiejar中
 response = opener.open('http://www.baidu.com')
+#可以按照标准格式将保存的Cookie打印出来
 for item in cookie:
     print(item.name+"="+item.value)
 #这里输州了每条Cookie的名称和值
@@ -213,6 +224,11 @@ print(type(result), result)
 """
 from urllib.parse import urlparse
 result = urlparse('http://www.baidu.com/index.html#comment', allow_fragments=False)
+#scheme协议
+#netloc网络位置，通常是主机名或IP地址
+#path志愿在服务器上的路径
+#query包含请求参数的字符串，用来向服务器传递额外的信息
+#fragment指定资源中的片段标识符，常用于网站的内部导航
 print(result.scheme, result[0], result.netloc, result[1], sep ='\n')
 # http
 # http
